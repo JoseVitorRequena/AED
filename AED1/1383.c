@@ -28,17 +28,14 @@ int VerificaMatriz(int **mat, int start, int n){
 
 int main(){
     int n;
-    // Recebe número de jogos n e alloca uma matriz do tamanho dos jogos
     scanf("%d", &n);
     int **mat = (int **)malloc((9 * n) * sizeof(int*));
     for (int i = 0; i < 9*n; ++i) mat[i] = (int *)malloc(9 * sizeof(int));
-    // Recebe a matriz por input
     for (int i = 0; i < 9*n; i++){
         for (int j = 0; j < 9; j++){
             scanf("%d", &mat[i][j]);
         }  
     }
-    // Verifica a Matriz
     for(int i = 0; i < n; i++){
         VerificaMatriz(mat,9*n,n);
     }

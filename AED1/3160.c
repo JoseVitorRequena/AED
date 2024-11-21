@@ -16,7 +16,7 @@ cel* criarNo(char *palavra) {
 
 void inserir(cel** head, char* palavra, char *condicao) {
     cel* nova = criarNo(palavra);
-
+    
     if (*head == NULL) {
         *head = nova;
         return;
