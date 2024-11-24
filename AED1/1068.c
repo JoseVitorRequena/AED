@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-#define MAX_EXPRESSION_LENGTH 1001
+//Verificador de chaves
+#define Max 1001
 
 typedef struct stack {
     int top;
-    char items[MAX_EXPRESSION_LENGTH];
+    char items[Max];
 } Stack;
 
 void initStack(Stack* stack) {
@@ -48,16 +48,14 @@ int verify(char* expression) {
 }
 
 int main() {
-    char expression[MAX_EXPRESSION_LENGTH];
-    int* result = (int*)malloc(10000 * sizeof(int));
-    memset(result, 0, 10000 * sizeof(int)); // Inicializa o array com zeros
+    char expression[Max];
+    int* result = (int*)calloc(10000, sizeof(int));
     int i = 0;
 
     while (fgets(expression, sizeof(expression), stdin) != NULL) {
         if (expression[0] == '\n') {
             break;
         }
-        
         expression[strcspn(expression, "\n")] = '\0';
         result[i] = verify(expression);
         i++;

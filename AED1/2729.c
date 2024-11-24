@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+//lista de compras
 typedef struct cel {
     char palavra[21];
     struct cel *proximo;

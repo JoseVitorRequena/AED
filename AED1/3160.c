@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+//lista de amigos
 typedef struct cel {
     char palavra[15];
     struct cel *proximo;

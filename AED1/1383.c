@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+//sudoku
 int VerificaMatriz(int **mat, int start, int n){
     for(int j = 0; j < start; j++){
         int *tempRow = (int*)calloc(9, sizeof(int));
