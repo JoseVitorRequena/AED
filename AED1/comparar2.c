@@ -2,9 +2,35 @@
 #include <stdlib.h>
 #include <time.h>
 
-void copymatriz(int* v1, int* v2, int MAX){
-
+void troca(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
+
+int particiona(int *v, int inicio, int fim) {
+    int pivo = v[fim];  
+    int i = inicio - 1; 
+
+    for (int j = inicio; j < fim; j++) {
+        if (v[j] <= pivo) {
+            i++;
+            troca(&v[i], &v[j]);
+        }
+    }
+
+    troca(&v[i + 1], &v[fim]); 
+    return i + 1;
+}
+
+void quicksort(int *v, int inicio, int fim) {
+    if (inicio < fim) {
+        int p = particiona(v, inicio, fim); 
+        quicksort(v, inicio, p - 1);      
+        quicksort(v, p + 1, fim);          
+    }
+}
+
 
 void insertion(int n, int v[]){
     int i, j, x;
@@ -40,36 +66,43 @@ void mergesort(int p, int r, int v[]){
 }
 
 int main(){
-    int *v1, *v2;
-    int MAX = 50000;
+    int *v1, *v2, *v3;
+    int MAX = 20000;
     float t;
 
     while (MAX<=400000){
         v1 = (int*)calloc(MAX, sizeof(int));
         v2 = (int*)calloc(MAX, sizeof(int));
+        v3 = (int*)calloc(MAX, sizeof(int));
 
         srand(time(NULL));
         for(int i = 0; i < MAX; i++){
             v1[i] = rand();
-        }
-        for(int i = 0; i < MAX; i++){
             v2[i] = v1[i];
+            v3[i] = v1[i];
         }
 
         printf("Max: %d\n", MAX);
         t = clock();
         insertion(MAX, v1);
         t = (float)(clock() - t) / CLOCKS_PER_SEC;;
-        printf("T insertion: %f\n", t);
+        printf("%f\n", t);
+        
         t = clock();
         mergesort(0, MAX, v2);
         t = (float)(clock() - t) / CLOCKS_PER_SEC;;
-        printf("T merge: %f\n", t);
+        printf("%f\n", t);
+
+        t = clock();
+         quicksort(v3, 0, MAX - 1);
+        t = (float)(clock() - t) / CLOCKS_PER_SEC;;
+        printf("%f\n", t);
 
         free(v1);
         free(v2);
-
-        MAX += 50000;
+        free(v3); 
+        
+        MAX += 20000;
     }
     return 0;
 }
