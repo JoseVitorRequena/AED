@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//ordenação
 int main(){
     int n, k, i = 0, j = 0;
     char* nome;

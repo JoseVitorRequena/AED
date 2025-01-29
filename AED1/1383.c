@@ -1,44 +1,65 @@
 #include <stdio.h>
-#include <stdlib.h>
-//sudoku
-int VerificaMatriz(int **mat, int start, int n){
-    for(int j = 0; j < start; j++){
-        int *tempRow = (int*)calloc(9, sizeof(int));
-        int *tempCol = (int*)calloc(9, sizeof(int));
-        for(int k = 0; k < start; k++){
-            tempRow[mat[j][k]-1]++;
-            tempCol[mat[k][j]-1]++;
-        }
-        for(int l = 0; l < 9; l++){
-            if(tempCol[l]!=1 || tempRow[l]!=1){
-                printf("Instancia %d \n", n);
-                printf("NAO\n\n");
-                return 0;
-            } else {
-                printf("Instancia %d \n", n);
-                printf("SIM\n\n");
-                return 0;
-            }
-        }
-        free(tempCol);
-        free(tempRow);
+
+int matriz[9][9];
+
+int verifica_linha(int linha) {
+    int existe[10] = {0};
+    for(int j = 0; j < 9; j++) {
+        if(existe[matriz[linha][j]] == 1) return 0;
+        existe[matriz[linha][j]] = 1;
     }
-    return 0;
+    return 1;
 }
 
-int main(){
-    int n;
+int verifica_coluna(int coluna) {
+    int existe[10] = {0};
+    for(int i = 0; i < 9; i++) {
+        if(existe[matriz[i][coluna]] == 1) return 0;
+        existe[matriz[i][coluna]] = 1;
+    }
+    return 1;
+}
+
+int verifica_quadrante(int linha, int coluna) {
+    int existe[10] = {0};
+    for(int i = linha; i < linha + 3; i++) {
+        for(int j = coluna; j < coluna + 3; j++) {
+            if(existe[matriz[i][j]] == 1) return 0;
+            existe[matriz[i][j]] = 1;
+        }
+    }
+    return 1;
+}
+
+int verifica_matriz() {
+    for(int i = 0; i < 9; i++) {
+        if(!verifica_linha(i)) return 0;
+        if(!verifica_coluna(i)) return 0;
+    }
+    
+    for(int i = 0; i < 9; i += 3) {
+        for(int j = 0; j < 9; j += 3) {
+            if(!verifica_quadrante(i, j)) return 0;
+        }
+    }
+    
+    return 1;
+}
+
+int main() {
+    int n, instancia = 1;
     scanf("%d", &n);
-    int **mat = (int **)malloc((9 * n) * sizeof(int*));
-    for (int i = 0; i < 9*n; ++i) mat[i] = (int *)malloc(9 * sizeof(int));
-    for (int i = 0; i < 9*n; i++){
-        for (int j = 0; j < 9; j++){
-            scanf("%d", &mat[i][j]);
-        }  
+    
+    while(n--) {
+        for(int i = 0; i < 9; i++) {
+            for(int j = 0; j < 9; j++) {
+                scanf("%d", &matriz[i][j]);
+            }
+        }
+        
+        printf("Instancia %d\n", instancia++);
+        printf("%s\n\n", verifica_matriz() ? "SIM" : "NAO");
     }
-    for(int i = 0; i < n; i++){
-        VerificaMatriz(mat,9*n,n);
-    }
-    free(mat);
+    
     return 0;
 }

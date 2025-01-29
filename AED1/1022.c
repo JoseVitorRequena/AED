@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-//Calculo de fração
+
 typedef struct eq{
     int ValueN;
     int ValueD;

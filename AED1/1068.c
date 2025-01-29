@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-//Verificador de chaves
 #define Max 1001
 
 typedef struct stack {
