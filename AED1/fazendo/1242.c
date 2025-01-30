@@ -1,47 +1,39 @@
 #include <stdio.h>
 #include <string.h>
 
-char fita[305];
-int dp[305][305];
-int n;
+#define MAX_TAMANHO 300
 
-int sao_pares(char a, char b) {
-    return (a == 'B' && b == 'S') || (a == 'S' && b == 'B') || 
-           (a == 'C' && b == 'F') || (a == 'F' && b == 'C');
-}
-
-int resolver(int inicio, int fim) {
-    if (inicio >= fim) return 0;
-    if (dp[inicio][fim] != -1) return dp[inicio][fim];
+int contar_ligacoes(const char *sequencia) {
+    int pilha_B = 0, pilha_C = 0; 
+    int ligacoes = 0;
     
-    int resposta = resolver(inicio + 1, fim);
-    
-    for (int k = inicio + 1; k <= fim; k++) {
-        if (sao_pares(fita[inicio], fita[k])) {
-            int ligacoes = 1;
-            if (k == inicio + 1)
-                ligacoes += resolver(k + 1, fim);
-            else
-                ligacoes += resolver(inicio + 1, k - 1) + resolver(k + 1, fim);
-                
-            if (ligacoes > resposta)
-                resposta = ligacoes;
+    for (int i = 0; sequencia[i] != '\0'; i++) {
+        if (sequencia[i] == 'B') {
+            pilha_B++;
+        } else if (sequencia[i] == 'S') {
+            if (pilha_B > 0) {
+                pilha_B--;
+                ligacoes++;
+            }
+        } else if (sequencia[i] == 'C') {
+            pilha_C++;
+        } else if (sequencia[i] == 'F') {
+            if (pilha_C > 0) {
+                pilha_C--;
+                ligacoes++;
+            }
         }
     }
     
-    dp[inicio][fim] = resposta;
-    return resposta;
+    return ligacoes;
 }
 
 int main() {
-    while (scanf("%s", fita) != EOF) {
-        n = strlen(fita);
-        
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                dp[i][j] = -1;
-                
-        printf("%d\n", resolver(0, n - 1));
+    char sequencia[MAX_TAMANHO + 1]; 
+
+    while (scanf("%s", sequencia) != EOF) {
+        printf("%d\n", contar_ligacoes(sequencia));
     }
+
     return 0;
 }
