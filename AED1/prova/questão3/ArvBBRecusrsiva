@@ -1,0 +1,139 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Estrutura de um nó da árvore
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+// Função para criar um novo nó
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+// Função de inserção recursiva
+struct Node* insert(struct Node* root, int value) {
+    // Se a árvore estiver vazia, cria um novo nó
+    if (root == NULL) {
+        return createNode(value);
+    }
+
+    // Caso contrário, percorre a árvore
+    if (value < root->data) {
+        root->left = insert(root->left, value); // Insere à esquerda
+    } else if (value > root->data) {
+        root->right = insert(root->right, value); // Insere à direita
+    }
+
+    return root;
+}
+
+// Função de busca recursiva
+struct Node* search(struct Node* root, int value) {
+    // Caso base: valor encontrado ou árvore vazia
+    if (root == NULL || root->data == value) {
+        return root;
+    }
+
+    // Se o valor for menor, busca à esquerda
+    if (value < root->data) {
+        return search(root->left, value);
+    }
+
+    // Se o valor for maior, busca à direita
+    return search(root->right, value);
+}
+
+// Função de travessia em ordem (in-order traversal)
+void inOrder(struct Node* root) {
+    if (root != NULL) {
+        inOrder(root->left);        // Visita a subárvore esquerda
+        printf("%d ", root->data);  // Visita o nó atual
+        inOrder(root->right);       // Visita a subárvore direita
+    }
+}
+
+// Função para encontrar o nó com o menor valor (usado na remoção)
+struct Node* findMin(struct Node* node) {
+    while (node->left != NULL) {
+        node = node->left;
+    }
+    return node;
+}
+
+// Função de remoção recursiva
+struct Node* deleteNode(struct Node* root, int value) {
+    // Caso base: árvore vazia
+    if (root == NULL) {
+        return root;
+    }
+
+    // Procura o nó a ser removido
+    if (value < root->data) {
+        root->left = deleteNode(root->left, value); // Busca à esquerda
+    } else if (value > root->data) {
+        root->right = deleteNode(root->right, value); // Busca à direita
+    } else {
+        // Nó encontrado: agora vamos removê-lo
+
+        // Caso 1: Nó com um filho ou sem filhos
+        if (root->left == NULL) {
+            struct Node* temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            struct Node* temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        // Caso 2: Nó com dois filhos
+        struct Node* temp = findMin(root->right); // Encontra o sucessor in-order
+        root->data = temp->data; // Copia o valor do sucessor
+        root->right = deleteNode(root->right, temp->data); // Remove o sucessor
+    }
+
+    return root;
+}
+
+int main() {
+    struct Node* root = NULL;
+
+    // Inserção de valores na árvore
+    root = insert(root, 50);
+    root = insert(root, 30);
+    root = insert(root, 20);
+    root = insert(root, 40);
+    root = insert(root, 70);
+    root = insert(root, 60);
+    root = insert(root, 80);
+
+    // Travessia em ordem
+    printf("Travessia em ordem: ");
+    inOrder(root);
+    printf("\n");
+
+    // Busca por um valor
+    int value = 40;
+    struct Node* result = search(root, value);
+    if (result != NULL) {
+        printf("Valor %d encontrado na árvore.\n", value);
+    } else {
+        printf("Valor %d não encontrado na árvore.\n", value);
+    }
+
+    // Remoção de um valor
+    printf("Removendo o valor 20...\n");
+    root = deleteNode(root, 20);
+    printf("Travessia em ordem após remoção: ");
+    inOrder(root);
+    printf("\n");
+
+    return 0;
+}
